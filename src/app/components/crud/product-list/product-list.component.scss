@@ -1,0 +1,7 @@
+.image-container {
+  height: 50px;
+  width: 50px;
+}
+:host::ng-deep.pagination {
+  margin-bottom: 0px !important;
+}

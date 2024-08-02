@@ -1,0 +1,332 @@
+<div class="container-fluid px-4">
+  <h4>Product List</h4>
+  <table class="table table-striped">
+    <thead>
+      <tr class="align-middle">
+        <th>Image</th>
+        <th>Product Name</th>
+        <th>Detail</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th>Created Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="align-middle">
+        <td></td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              placeholder="Search Product"
+              type="search"
+              name="search-name"
+              id="search-name"
+              (input)="handleFilter($event, 'name')"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              placeholder="Search Detail"
+              type="search"
+              name="search-detail"
+              id="search-detail"
+              (input)="handleFilter($event, 'details')"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              placeholder="Search Price"
+              type="search"
+              name="search-price"
+              id="search-price"
+              (input)="handleFilter($event, 'price')"
+            />
+          </div>
+        </td>
+        <td></td>
+        <td></td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              placeholder="Search Product"
+              type="date"
+              name="search-name"
+              id="search-name"
+              (change)="handleFilter($event, 'createAt')"
+            />
+          </div>
+        </td>
+        <td></td>
+      </tr>
+
+      <tr
+        class="align-middle"
+        *ngFor="let product of productsOnPage; let index = index"
+      >
+        <td>
+          <div class="image-container rounded-circle">
+            <img
+              class="h-100 w-100 rounded-circle"
+              src="{{ product.image }}"
+              alt="{{ product.name }}"
+            />
+          </div>
+        </td>
+        <td>
+          <div
+            class="form-group"
+            *ngIf="isEdit && editedProductIndex === index"
+          >
+            <input
+              class="form-control w-auto p-1"
+              type="text"
+              name="product-name"
+              id="product-name"
+              [(ngModel)]="pName"
+            />
+          </div>
+          <p *ngIf="editedProductIndex !== index">
+            {{ product.name }}
+          </p>
+        </td>
+        <td>
+          <div
+            class="form-group"
+            *ngIf="isEdit && editedProductIndex === index"
+          >
+            <input
+              class="form-control w-auto p-1"
+              type="text"
+              name="product-details"
+              id="product-details"
+              [(ngModel)]="pDetails"
+            />
+          </div>
+          <p *ngIf="editedProductIndex !== index">
+            {{ product.details }}
+          </p>
+        </td>
+        <td>
+          <div
+            class="form-group"
+            *ngIf="isEdit && editedProductIndex === index"
+          >
+            <input
+              class="form-control w-auto p-1"
+              type="text"
+              name="product-price"
+              id="product-price"
+              [(ngModel)]="pPrice"
+            />
+          </div>
+          <p *ngIf="editedProductIndex !== index">
+            {{ product.price }}
+          </p>
+        </td>
+        <td>
+          <div
+            class="form-group"
+            *ngIf="isEdit && editedProductIndex === index"
+          >
+            <input
+              class="form-control w-auto p-1"
+              type="number"
+              name="product-qty"
+              id="product-qty"
+              [(ngModel)]="pQuantity"
+            />
+          </div>
+          <p *ngIf="editedProductIndex !== index">
+            {{ product.quantity }}
+          </p>
+        </td>
+        <td>
+          <div
+            class="form-group"
+            *ngIf="isEdit && editedProductIndex === index"
+          >
+            <input
+              class="form-control w-auto p-1"
+              type="text"
+              name="total-price"
+              id="total-price"
+              [(ngModel)]="pTotalPrice"
+            />
+          </div>
+          <p *ngIf="editedProductIndex !== index">
+            {{ product.totalPrice }}
+          </p>
+        </td>
+        <td>
+          <div
+            class="form-group"
+            *ngIf="isEdit && editedProductIndex === index"
+          >
+            <input
+              class="form-control w-auto p-1"
+              type="date"
+              name="created-date"
+              id="created-date"
+              [(ngModel)]="pDate"
+            />
+          </div>
+          <p *ngIf="editedProductIndex !== index">
+            {{ product.createAt }}
+          </p>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn text-primary border-0 p-1"
+            (click)="
+              isEdit ? handleAddProduct() : handleEditProduct(product, index)
+            "
+          >
+            <i
+              class="bi bi-pencil-square"
+              [ngClass]="isEdit ? 'bi-floppy' : 'bi-pencil-square'"
+            ></i>
+          </button>
+          <button
+            type="button"
+            class="btn text-danger border-0 p-1"
+            (click)="handleDeleteProduct(product, index)"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+
+      <tr class="align-middle" *ngIf="isAddProduct">
+        <td>
+          <button
+            type="button"
+            class="btn border-secondary border p-1"
+            (click)="file.click()"
+          >
+            upload
+            <input
+              type="file"
+              hidden
+              #file
+              accept="image/*"
+              (change)="handleFileChange($event)"
+              name="file"
+              id="file"
+            />
+          </button>
+        </td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              type="text"
+              name="product-name"
+              id="product-name"
+              [(ngModel)]="pName"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              type="text"
+              name="product-details"
+              id="product-details"
+              [(ngModel)]="pDetails"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              type="text"
+              name="product-price"
+              id="product-price"
+              [(ngModel)]="pPrice"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              type="number"
+              name="product-qty"
+              id="product-qty"
+              [(ngModel)]="pQuantity"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              type="text"
+              name="total-price"
+              id="total-price"
+              [(ngModel)]="pTotalPrice"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <input
+              class="form-control w-auto p-1"
+              type="date"
+              name="created-date"
+              id="created-date"
+              [(ngModel)]="pDate"
+            />
+          </div>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn text-primary border-0 p-1"
+            (click)="handleAddProduct()"
+          >
+            <i class="bi bi-floppy"></i>
+          </button>
+          <button
+            type="button"
+            class="btn text-danger border-0 p-1"
+            (click)="clearValues()"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex align-items-center justify-content-between">
+    <ngb-pagination
+      [collectionSize]="collectionSize"
+      [pageSize]="pageSize"
+      [(page)]="page"
+      [maxSize]="5"
+      (pageChange)="handlePageChange($event)"
+      aria-label="Default pagination"
+    />
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="isAddProduct = !isAddProduct"
+    >
+      <i class="bi bi-plus-circle-fill"></i>
+      Add Product
+    </button>
+  </div>
+</div>
